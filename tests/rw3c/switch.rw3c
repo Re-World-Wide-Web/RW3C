@@ -1,0 +1,14 @@
+switch a {
+    case 0:
+        log(0)
+    case 1:
+        log(1)
+    default:
+        log(-1)
+}
+
+log(switch a {
+    case 0: 0
+    case 1: 1
+    default: -1
+});

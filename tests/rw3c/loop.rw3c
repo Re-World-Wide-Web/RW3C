@@ -1,0 +1,7 @@
+let a = 10;
+
+while a>0 log(a--);
+
+a = 10;
+
+log(while a>0 a--)

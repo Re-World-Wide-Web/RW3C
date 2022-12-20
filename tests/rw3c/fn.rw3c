@@ -1,0 +1,8 @@
+fn add(a: int, b: int): int a+b;
+fn sub(a: int, b: int) a-b;
+fn div(a: int, b) {
+    ret a/b;
+};
+fn mul(a, b) a*b;
+
+log(add(1, 2), sub(1, 2), div(1, 2), mul(1, 2));

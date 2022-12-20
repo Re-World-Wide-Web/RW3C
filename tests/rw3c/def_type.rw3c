@@ -1,0 +1,5 @@
+struct a {
+    c: 0,
+    d: 1
+};
+type b = 0 | "str" | a;

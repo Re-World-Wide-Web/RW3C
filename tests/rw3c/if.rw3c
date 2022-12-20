@@ -1,0 +1,5 @@
+if a>0 log(a)
+else if b<0 log(b)
+else log(c)
+
+log(if a>0 a else if b<0 b else c)
