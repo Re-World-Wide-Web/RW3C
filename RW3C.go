@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"os"
 
-	parser "github.com/NekoMaru76/rw3/build/RW3C"
-	interpreter "github.com/NekoMaru76/rw3/interpreter"
-	"github.com/NekoMaru76/rw3/object"
+	parser "github.com/NekoMaru76/rw3c/build/RW3C"
+	interpreter "github.com/NekoMaru76/rw3c/interpreter"
+	"github.com/NekoMaru76/rw3c/object"
+	"github.com/NekoMaru76/rw3c/serror"
 	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 )
 
@@ -32,31 +33,36 @@ func main() {
 	tree := p.Prog()
 	listener := interpreter.Interpret(tree, input.GetSourceName())
 	wrapped := listener.Objs[len(listener.Objs)-1]
-	logName := "log"
-	logValue := func(args ...object.Object) (*object.Object, bool, *object.Error) {
-		null := object.NewNullObject()
-		str := ""
+	Log := object.FunctionObject{
+		Value: func(args ...object.Object) (*object.Object, *serror.Error) {
+			null := object.NewNullObject()
+			str := ""
 
-		for i, obj := range args {
-			if i != 0 {
-				str += " "
+			for i, obj := range args {
+				if i != 0 {
+					str += " "
+				}
+
+				str += obj.String()
 			}
 
-			str += obj.String()
-		}
+			fmt.Println(str)
 
-		fmt.Println(str)
-
-		return &null, true, nil
-	}
-	v, ok, e := wrapped([]object.Location{}, object.NewMainScope(object.RootVars{
-		Log: object.FunctionObject{
-			Name:  &logName,
-			Value: logValue,
+			return &null, nil
 		},
+	}
+	unwrapped := wrapped([]serror.Location{}, object.NewMainScope(object.RootVars{
+		Log: Log,
 	}))
+	e := unwrapped.Test()
 
-	if !ok {
+	if e != nil {
+		panic(e.String())
+	}
+
+	v, er := unwrapped.Value()
+
+	if er != nil {
 		panic(e.String())
 	}
 

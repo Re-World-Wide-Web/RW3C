@@ -14,80 +14,86 @@ type RW3CListener interface {
 	// EnterRun is called when entering the run production.
 	EnterRun(c *RunContext)
 
+	// EnterWhileRun is called when entering the whileRun production.
+	EnterWhileRun(c *WhileRunContext)
+
+	// EnterWhileExprBody is called when entering the whileExprBody production.
+	EnterWhileExprBody(c *WhileExprBodyContext)
+
 	// EnterExpr is called when entering the expr production.
 	EnterExpr(c *ExprContext)
 
-	// EnterChain_expr is called when entering the chain_expr production.
-	EnterChain_expr(c *Chain_exprContext)
+	// EnterAtomicExpr is called when entering the atomicExpr production.
+	EnterAtomicExpr(c *AtomicExprContext)
 
-	// EnterAtomic_expr is called when entering the atomic_expr production.
-	EnterAtomic_expr(c *Atomic_exprContext)
+	// EnterChainExpr is called when entering the chainExpr production.
+	EnterChainExpr(c *ChainExprContext)
+
+	// EnterCallExpr is called when entering the callExpr production.
+	EnterCallExpr(c *CallExprContext)
+
+	// EnterAccessPropExpr is called when entering the accessPropExpr production.
+	EnterAccessPropExpr(c *AccessPropExprContext)
 
 	// EnterStmt is called when entering the stmt production.
 	EnterStmt(c *StmtContext)
 
-	// EnterIf_stmt is called when entering the if_stmt production.
-	EnterIf_stmt(c *If_stmtContext)
+	// EnterIfStmt is called when entering the ifStmt production.
+	EnterIfStmt(c *IfStmtContext)
 
-	// EnterIf_expr is called when entering the if_expr production.
-	EnterIf_expr(c *If_exprContext)
+	// EnterIfExpr is called when entering the ifExpr production.
+	EnterIfExpr(c *IfExprContext)
 
-	// EnterSwitch_stmt is called when entering the switch_stmt production.
-	EnterSwitch_stmt(c *Switch_stmtContext)
+	// EnterSwitchStmt is called when entering the switchStmt production.
+	EnterSwitchStmt(c *SwitchStmtContext)
 
-	// EnterSwitch_expr is called when entering the switch_expr production.
-	EnterSwitch_expr(c *Switch_exprContext)
+	// EnterSwitchExpr is called when entering the switchExpr production.
+	EnterSwitchExpr(c *SwitchExprContext)
 
-	// EnterWhile_stmt is called when entering the while_stmt production.
-	EnterWhile_stmt(c *While_stmtContext)
+	// EnterWhileStmt is called when entering the whileStmt production.
+	EnterWhileStmt(c *WhileStmtContext)
 
-	// EnterWhile_expr is called when entering the while_expr production.
-	EnterWhile_expr(c *While_exprContext)
+	// EnterWhileExpr is called when entering the whileExpr production.
+	EnterWhileExpr(c *WhileExprContext)
 
-	// EnterRet_stmt is called when entering the ret_stmt production.
-	EnterRet_stmt(c *Ret_stmtContext)
+	// EnterRetStmt is called when entering the retStmt production.
+	EnterRetStmt(c *RetStmtContext)
 
-	// EnterDef_var_stmt is called when entering the def_var_stmt production.
-	EnterDef_var_stmt(c *Def_var_stmtContext)
+	// EnterDefVarStmt is called when entering the defVarStmt production.
+	EnterDefVarStmt(c *DefVarStmtContext)
 
-	// EnterDef_type_stmt is called when entering the def_type_stmt production.
-	EnterDef_type_stmt(c *Def_type_stmtContext)
+	// EnterDefTypeStmt is called when entering the defTypeStmt production.
+	EnterDefTypeStmt(c *DefTypeStmtContext)
 
-	// EnterStruct_stmt is called when entering the struct_stmt production.
-	EnterStruct_stmt(c *Struct_stmtContext)
+	// EnterStructStmt is called when entering the structStmt production.
+	EnterStructStmt(c *StructStmtContext)
 
-	// EnterAssign_stmt is called when entering the assign_stmt production.
-	EnterAssign_stmt(c *Assign_stmtContext)
+	// EnterAssignStmt is called when entering the assignStmt production.
+	EnterAssignStmt(c *AssignStmtContext)
 
-	// EnterCall_expr is called when entering the call_expr production.
-	EnterCall_expr(c *Call_exprContext)
-
-	// EnterAccess_prop_expr is called when entering the access_prop_expr production.
-	EnterAccess_prop_expr(c *Access_prop_exprContext)
-
-	// EnterFn_expr is called when entering the fn_expr production.
-	EnterFn_expr(c *Fn_exprContext)
+	// EnterFnExpr is called when entering the fnExpr production.
+	EnterFnExpr(c *FnExprContext)
 
 	// EnterScope is called when entering the scope production.
 	EnterScope(c *ScopeContext)
 
-	// EnterAccess_prop_type_expr is called when entering the access_prop_type_expr production.
-	EnterAccess_prop_type_expr(c *Access_prop_type_exprContext)
+	// EnterAccessPropTypeExpr is called when entering the accessPropTypeExpr production.
+	EnterAccessPropTypeExpr(c *AccessPropTypeExprContext)
 
-	// EnterType_expr is called when entering the type_expr production.
-	EnterType_expr(c *Type_exprContext)
+	// EnterTypeExpr is called when entering the typeExpr production.
+	EnterTypeExpr(c *TypeExprContext)
 
-	// EnterType_arg is called when entering the type_arg production.
-	EnterType_arg(c *Type_argContext)
+	// EnterTypeArg is called when entering the typeArg production.
+	EnterTypeArg(c *TypeArgContext)
 
-	// EnterName_expr is called when entering the name_expr production.
-	EnterName_expr(c *Name_exprContext)
+	// EnterNameExpr is called when entering the nameExpr production.
+	EnterNameExpr(c *NameExprContext)
 
 	// EnterArg is called when entering the arg production.
 	EnterArg(c *ArgContext)
 
-	// EnterLit_expr is called when entering the lit_expr production.
-	EnterLit_expr(c *Lit_exprContext)
+	// EnterLitExpr is called when entering the litExpr production.
+	EnterLitExpr(c *LitExprContext)
 
 	// ExitProg is called when exiting the prog production.
 	ExitProg(c *ProgContext)
@@ -95,78 +101,84 @@ type RW3CListener interface {
 	// ExitRun is called when exiting the run production.
 	ExitRun(c *RunContext)
 
+	// ExitWhileRun is called when exiting the whileRun production.
+	ExitWhileRun(c *WhileRunContext)
+
+	// ExitWhileExprBody is called when exiting the whileExprBody production.
+	ExitWhileExprBody(c *WhileExprBodyContext)
+
 	// ExitExpr is called when exiting the expr production.
 	ExitExpr(c *ExprContext)
 
-	// ExitChain_expr is called when exiting the chain_expr production.
-	ExitChain_expr(c *Chain_exprContext)
+	// ExitAtomicExpr is called when exiting the atomicExpr production.
+	ExitAtomicExpr(c *AtomicExprContext)
 
-	// ExitAtomic_expr is called when exiting the atomic_expr production.
-	ExitAtomic_expr(c *Atomic_exprContext)
+	// ExitChainExpr is called when exiting the chainExpr production.
+	ExitChainExpr(c *ChainExprContext)
+
+	// ExitCallExpr is called when exiting the callExpr production.
+	ExitCallExpr(c *CallExprContext)
+
+	// ExitAccessPropExpr is called when exiting the accessPropExpr production.
+	ExitAccessPropExpr(c *AccessPropExprContext)
 
 	// ExitStmt is called when exiting the stmt production.
 	ExitStmt(c *StmtContext)
 
-	// ExitIf_stmt is called when exiting the if_stmt production.
-	ExitIf_stmt(c *If_stmtContext)
+	// ExitIfStmt is called when exiting the ifStmt production.
+	ExitIfStmt(c *IfStmtContext)
 
-	// ExitIf_expr is called when exiting the if_expr production.
-	ExitIf_expr(c *If_exprContext)
+	// ExitIfExpr is called when exiting the ifExpr production.
+	ExitIfExpr(c *IfExprContext)
 
-	// ExitSwitch_stmt is called when exiting the switch_stmt production.
-	ExitSwitch_stmt(c *Switch_stmtContext)
+	// ExitSwitchStmt is called when exiting the switchStmt production.
+	ExitSwitchStmt(c *SwitchStmtContext)
 
-	// ExitSwitch_expr is called when exiting the switch_expr production.
-	ExitSwitch_expr(c *Switch_exprContext)
+	// ExitSwitchExpr is called when exiting the switchExpr production.
+	ExitSwitchExpr(c *SwitchExprContext)
 
-	// ExitWhile_stmt is called when exiting the while_stmt production.
-	ExitWhile_stmt(c *While_stmtContext)
+	// ExitWhileStmt is called when exiting the whileStmt production.
+	ExitWhileStmt(c *WhileStmtContext)
 
-	// ExitWhile_expr is called when exiting the while_expr production.
-	ExitWhile_expr(c *While_exprContext)
+	// ExitWhileExpr is called when exiting the whileExpr production.
+	ExitWhileExpr(c *WhileExprContext)
 
-	// ExitRet_stmt is called when exiting the ret_stmt production.
-	ExitRet_stmt(c *Ret_stmtContext)
+	// ExitRetStmt is called when exiting the retStmt production.
+	ExitRetStmt(c *RetStmtContext)
 
-	// ExitDef_var_stmt is called when exiting the def_var_stmt production.
-	ExitDef_var_stmt(c *Def_var_stmtContext)
+	// ExitDefVarStmt is called when exiting the defVarStmt production.
+	ExitDefVarStmt(c *DefVarStmtContext)
 
-	// ExitDef_type_stmt is called when exiting the def_type_stmt production.
-	ExitDef_type_stmt(c *Def_type_stmtContext)
+	// ExitDefTypeStmt is called when exiting the defTypeStmt production.
+	ExitDefTypeStmt(c *DefTypeStmtContext)
 
-	// ExitStruct_stmt is called when exiting the struct_stmt production.
-	ExitStruct_stmt(c *Struct_stmtContext)
+	// ExitStructStmt is called when exiting the structStmt production.
+	ExitStructStmt(c *StructStmtContext)
 
-	// ExitAssign_stmt is called when exiting the assign_stmt production.
-	ExitAssign_stmt(c *Assign_stmtContext)
+	// ExitAssignStmt is called when exiting the assignStmt production.
+	ExitAssignStmt(c *AssignStmtContext)
 
-	// ExitCall_expr is called when exiting the call_expr production.
-	ExitCall_expr(c *Call_exprContext)
-
-	// ExitAccess_prop_expr is called when exiting the access_prop_expr production.
-	ExitAccess_prop_expr(c *Access_prop_exprContext)
-
-	// ExitFn_expr is called when exiting the fn_expr production.
-	ExitFn_expr(c *Fn_exprContext)
+	// ExitFnExpr is called when exiting the fnExpr production.
+	ExitFnExpr(c *FnExprContext)
 
 	// ExitScope is called when exiting the scope production.
 	ExitScope(c *ScopeContext)
 
-	// ExitAccess_prop_type_expr is called when exiting the access_prop_type_expr production.
-	ExitAccess_prop_type_expr(c *Access_prop_type_exprContext)
+	// ExitAccessPropTypeExpr is called when exiting the accessPropTypeExpr production.
+	ExitAccessPropTypeExpr(c *AccessPropTypeExprContext)
 
-	// ExitType_expr is called when exiting the type_expr production.
-	ExitType_expr(c *Type_exprContext)
+	// ExitTypeExpr is called when exiting the typeExpr production.
+	ExitTypeExpr(c *TypeExprContext)
 
-	// ExitType_arg is called when exiting the type_arg production.
-	ExitType_arg(c *Type_argContext)
+	// ExitTypeArg is called when exiting the typeArg production.
+	ExitTypeArg(c *TypeArgContext)
 
-	// ExitName_expr is called when exiting the name_expr production.
-	ExitName_expr(c *Name_exprContext)
+	// ExitNameExpr is called when exiting the nameExpr production.
+	ExitNameExpr(c *NameExprContext)
 
 	// ExitArg is called when exiting the arg production.
 	ExitArg(c *ArgContext)
 
-	// ExitLit_expr is called when exiting the lit_expr production.
-	ExitLit_expr(c *Lit_exprContext)
+	// ExitLitExpr is called when exiting the litExpr production.
+	ExitLitExpr(c *LitExprContext)
 }

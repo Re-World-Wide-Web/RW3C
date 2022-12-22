@@ -33,23 +33,47 @@ func (s *BaseRW3CListener) EnterRun(ctx *RunContext) {}
 // ExitRun is called when production run is exited.
 func (s *BaseRW3CListener) ExitRun(ctx *RunContext) {}
 
+// EnterWhileRun is called when production whileRun is entered.
+func (s *BaseRW3CListener) EnterWhileRun(ctx *WhileRunContext) {}
+
+// ExitWhileRun is called when production whileRun is exited.
+func (s *BaseRW3CListener) ExitWhileRun(ctx *WhileRunContext) {}
+
+// EnterWhileExprBody is called when production whileExprBody is entered.
+func (s *BaseRW3CListener) EnterWhileExprBody(ctx *WhileExprBodyContext) {}
+
+// ExitWhileExprBody is called when production whileExprBody is exited.
+func (s *BaseRW3CListener) ExitWhileExprBody(ctx *WhileExprBodyContext) {}
+
 // EnterExpr is called when production expr is entered.
 func (s *BaseRW3CListener) EnterExpr(ctx *ExprContext) {}
 
 // ExitExpr is called when production expr is exited.
 func (s *BaseRW3CListener) ExitExpr(ctx *ExprContext) {}
 
-// EnterChain_expr is called when production chain_expr is entered.
-func (s *BaseRW3CListener) EnterChain_expr(ctx *Chain_exprContext) {}
+// EnterAtomicExpr is called when production atomicExpr is entered.
+func (s *BaseRW3CListener) EnterAtomicExpr(ctx *AtomicExprContext) {}
 
-// ExitChain_expr is called when production chain_expr is exited.
-func (s *BaseRW3CListener) ExitChain_expr(ctx *Chain_exprContext) {}
+// ExitAtomicExpr is called when production atomicExpr is exited.
+func (s *BaseRW3CListener) ExitAtomicExpr(ctx *AtomicExprContext) {}
 
-// EnterAtomic_expr is called when production atomic_expr is entered.
-func (s *BaseRW3CListener) EnterAtomic_expr(ctx *Atomic_exprContext) {}
+// EnterChainExpr is called when production chainExpr is entered.
+func (s *BaseRW3CListener) EnterChainExpr(ctx *ChainExprContext) {}
 
-// ExitAtomic_expr is called when production atomic_expr is exited.
-func (s *BaseRW3CListener) ExitAtomic_expr(ctx *Atomic_exprContext) {}
+// ExitChainExpr is called when production chainExpr is exited.
+func (s *BaseRW3CListener) ExitChainExpr(ctx *ChainExprContext) {}
+
+// EnterCallExpr is called when production callExpr is entered.
+func (s *BaseRW3CListener) EnterCallExpr(ctx *CallExprContext) {}
+
+// ExitCallExpr is called when production callExpr is exited.
+func (s *BaseRW3CListener) ExitCallExpr(ctx *CallExprContext) {}
+
+// EnterAccessPropExpr is called when production accessPropExpr is entered.
+func (s *BaseRW3CListener) EnterAccessPropExpr(ctx *AccessPropExprContext) {}
+
+// ExitAccessPropExpr is called when production accessPropExpr is exited.
+func (s *BaseRW3CListener) ExitAccessPropExpr(ctx *AccessPropExprContext) {}
 
 // EnterStmt is called when production stmt is entered.
 func (s *BaseRW3CListener) EnterStmt(ctx *StmtContext) {}
@@ -57,89 +81,77 @@ func (s *BaseRW3CListener) EnterStmt(ctx *StmtContext) {}
 // ExitStmt is called when production stmt is exited.
 func (s *BaseRW3CListener) ExitStmt(ctx *StmtContext) {}
 
-// EnterIf_stmt is called when production if_stmt is entered.
-func (s *BaseRW3CListener) EnterIf_stmt(ctx *If_stmtContext) {}
+// EnterIfStmt is called when production ifStmt is entered.
+func (s *BaseRW3CListener) EnterIfStmt(ctx *IfStmtContext) {}
 
-// ExitIf_stmt is called when production if_stmt is exited.
-func (s *BaseRW3CListener) ExitIf_stmt(ctx *If_stmtContext) {}
+// ExitIfStmt is called when production ifStmt is exited.
+func (s *BaseRW3CListener) ExitIfStmt(ctx *IfStmtContext) {}
 
-// EnterIf_expr is called when production if_expr is entered.
-func (s *BaseRW3CListener) EnterIf_expr(ctx *If_exprContext) {}
+// EnterIfExpr is called when production ifExpr is entered.
+func (s *BaseRW3CListener) EnterIfExpr(ctx *IfExprContext) {}
 
-// ExitIf_expr is called when production if_expr is exited.
-func (s *BaseRW3CListener) ExitIf_expr(ctx *If_exprContext) {}
+// ExitIfExpr is called when production ifExpr is exited.
+func (s *BaseRW3CListener) ExitIfExpr(ctx *IfExprContext) {}
 
-// EnterSwitch_stmt is called when production switch_stmt is entered.
-func (s *BaseRW3CListener) EnterSwitch_stmt(ctx *Switch_stmtContext) {}
+// EnterSwitchStmt is called when production switchStmt is entered.
+func (s *BaseRW3CListener) EnterSwitchStmt(ctx *SwitchStmtContext) {}
 
-// ExitSwitch_stmt is called when production switch_stmt is exited.
-func (s *BaseRW3CListener) ExitSwitch_stmt(ctx *Switch_stmtContext) {}
+// ExitSwitchStmt is called when production switchStmt is exited.
+func (s *BaseRW3CListener) ExitSwitchStmt(ctx *SwitchStmtContext) {}
 
-// EnterSwitch_expr is called when production switch_expr is entered.
-func (s *BaseRW3CListener) EnterSwitch_expr(ctx *Switch_exprContext) {}
+// EnterSwitchExpr is called when production switchExpr is entered.
+func (s *BaseRW3CListener) EnterSwitchExpr(ctx *SwitchExprContext) {}
 
-// ExitSwitch_expr is called when production switch_expr is exited.
-func (s *BaseRW3CListener) ExitSwitch_expr(ctx *Switch_exprContext) {}
+// ExitSwitchExpr is called when production switchExpr is exited.
+func (s *BaseRW3CListener) ExitSwitchExpr(ctx *SwitchExprContext) {}
 
-// EnterWhile_stmt is called when production while_stmt is entered.
-func (s *BaseRW3CListener) EnterWhile_stmt(ctx *While_stmtContext) {}
+// EnterWhileStmt is called when production whileStmt is entered.
+func (s *BaseRW3CListener) EnterWhileStmt(ctx *WhileStmtContext) {}
 
-// ExitWhile_stmt is called when production while_stmt is exited.
-func (s *BaseRW3CListener) ExitWhile_stmt(ctx *While_stmtContext) {}
+// ExitWhileStmt is called when production whileStmt is exited.
+func (s *BaseRW3CListener) ExitWhileStmt(ctx *WhileStmtContext) {}
 
-// EnterWhile_expr is called when production while_expr is entered.
-func (s *BaseRW3CListener) EnterWhile_expr(ctx *While_exprContext) {}
+// EnterWhileExpr is called when production whileExpr is entered.
+func (s *BaseRW3CListener) EnterWhileExpr(ctx *WhileExprContext) {}
 
-// ExitWhile_expr is called when production while_expr is exited.
-func (s *BaseRW3CListener) ExitWhile_expr(ctx *While_exprContext) {}
+// ExitWhileExpr is called when production whileExpr is exited.
+func (s *BaseRW3CListener) ExitWhileExpr(ctx *WhileExprContext) {}
 
-// EnterRet_stmt is called when production ret_stmt is entered.
-func (s *BaseRW3CListener) EnterRet_stmt(ctx *Ret_stmtContext) {}
+// EnterRetStmt is called when production retStmt is entered.
+func (s *BaseRW3CListener) EnterRetStmt(ctx *RetStmtContext) {}
 
-// ExitRet_stmt is called when production ret_stmt is exited.
-func (s *BaseRW3CListener) ExitRet_stmt(ctx *Ret_stmtContext) {}
+// ExitRetStmt is called when production retStmt is exited.
+func (s *BaseRW3CListener) ExitRetStmt(ctx *RetStmtContext) {}
 
-// EnterDef_var_stmt is called when production def_var_stmt is entered.
-func (s *BaseRW3CListener) EnterDef_var_stmt(ctx *Def_var_stmtContext) {}
+// EnterDefVarStmt is called when production defVarStmt is entered.
+func (s *BaseRW3CListener) EnterDefVarStmt(ctx *DefVarStmtContext) {}
 
-// ExitDef_var_stmt is called when production def_var_stmt is exited.
-func (s *BaseRW3CListener) ExitDef_var_stmt(ctx *Def_var_stmtContext) {}
+// ExitDefVarStmt is called when production defVarStmt is exited.
+func (s *BaseRW3CListener) ExitDefVarStmt(ctx *DefVarStmtContext) {}
 
-// EnterDef_type_stmt is called when production def_type_stmt is entered.
-func (s *BaseRW3CListener) EnterDef_type_stmt(ctx *Def_type_stmtContext) {}
+// EnterDefTypeStmt is called when production defTypeStmt is entered.
+func (s *BaseRW3CListener) EnterDefTypeStmt(ctx *DefTypeStmtContext) {}
 
-// ExitDef_type_stmt is called when production def_type_stmt is exited.
-func (s *BaseRW3CListener) ExitDef_type_stmt(ctx *Def_type_stmtContext) {}
+// ExitDefTypeStmt is called when production defTypeStmt is exited.
+func (s *BaseRW3CListener) ExitDefTypeStmt(ctx *DefTypeStmtContext) {}
 
-// EnterStruct_stmt is called when production struct_stmt is entered.
-func (s *BaseRW3CListener) EnterStruct_stmt(ctx *Struct_stmtContext) {}
+// EnterStructStmt is called when production structStmt is entered.
+func (s *BaseRW3CListener) EnterStructStmt(ctx *StructStmtContext) {}
 
-// ExitStruct_stmt is called when production struct_stmt is exited.
-func (s *BaseRW3CListener) ExitStruct_stmt(ctx *Struct_stmtContext) {}
+// ExitStructStmt is called when production structStmt is exited.
+func (s *BaseRW3CListener) ExitStructStmt(ctx *StructStmtContext) {}
 
-// EnterAssign_stmt is called when production assign_stmt is entered.
-func (s *BaseRW3CListener) EnterAssign_stmt(ctx *Assign_stmtContext) {}
+// EnterAssignStmt is called when production assignStmt is entered.
+func (s *BaseRW3CListener) EnterAssignStmt(ctx *AssignStmtContext) {}
 
-// ExitAssign_stmt is called when production assign_stmt is exited.
-func (s *BaseRW3CListener) ExitAssign_stmt(ctx *Assign_stmtContext) {}
+// ExitAssignStmt is called when production assignStmt is exited.
+func (s *BaseRW3CListener) ExitAssignStmt(ctx *AssignStmtContext) {}
 
-// EnterCall_expr is called when production call_expr is entered.
-func (s *BaseRW3CListener) EnterCall_expr(ctx *Call_exprContext) {}
+// EnterFnExpr is called when production fnExpr is entered.
+func (s *BaseRW3CListener) EnterFnExpr(ctx *FnExprContext) {}
 
-// ExitCall_expr is called when production call_expr is exited.
-func (s *BaseRW3CListener) ExitCall_expr(ctx *Call_exprContext) {}
-
-// EnterAccess_prop_expr is called when production access_prop_expr is entered.
-func (s *BaseRW3CListener) EnterAccess_prop_expr(ctx *Access_prop_exprContext) {}
-
-// ExitAccess_prop_expr is called when production access_prop_expr is exited.
-func (s *BaseRW3CListener) ExitAccess_prop_expr(ctx *Access_prop_exprContext) {}
-
-// EnterFn_expr is called when production fn_expr is entered.
-func (s *BaseRW3CListener) EnterFn_expr(ctx *Fn_exprContext) {}
-
-// ExitFn_expr is called when production fn_expr is exited.
-func (s *BaseRW3CListener) ExitFn_expr(ctx *Fn_exprContext) {}
+// ExitFnExpr is called when production fnExpr is exited.
+func (s *BaseRW3CListener) ExitFnExpr(ctx *FnExprContext) {}
 
 // EnterScope is called when production scope is entered.
 func (s *BaseRW3CListener) EnterScope(ctx *ScopeContext) {}
@@ -147,29 +159,29 @@ func (s *BaseRW3CListener) EnterScope(ctx *ScopeContext) {}
 // ExitScope is called when production scope is exited.
 func (s *BaseRW3CListener) ExitScope(ctx *ScopeContext) {}
 
-// EnterAccess_prop_type_expr is called when production access_prop_type_expr is entered.
-func (s *BaseRW3CListener) EnterAccess_prop_type_expr(ctx *Access_prop_type_exprContext) {}
+// EnterAccessPropTypeExpr is called when production accessPropTypeExpr is entered.
+func (s *BaseRW3CListener) EnterAccessPropTypeExpr(ctx *AccessPropTypeExprContext) {}
 
-// ExitAccess_prop_type_expr is called when production access_prop_type_expr is exited.
-func (s *BaseRW3CListener) ExitAccess_prop_type_expr(ctx *Access_prop_type_exprContext) {}
+// ExitAccessPropTypeExpr is called when production accessPropTypeExpr is exited.
+func (s *BaseRW3CListener) ExitAccessPropTypeExpr(ctx *AccessPropTypeExprContext) {}
 
-// EnterType_expr is called when production type_expr is entered.
-func (s *BaseRW3CListener) EnterType_expr(ctx *Type_exprContext) {}
+// EnterTypeExpr is called when production typeExpr is entered.
+func (s *BaseRW3CListener) EnterTypeExpr(ctx *TypeExprContext) {}
 
-// ExitType_expr is called when production type_expr is exited.
-func (s *BaseRW3CListener) ExitType_expr(ctx *Type_exprContext) {}
+// ExitTypeExpr is called when production typeExpr is exited.
+func (s *BaseRW3CListener) ExitTypeExpr(ctx *TypeExprContext) {}
 
-// EnterType_arg is called when production type_arg is entered.
-func (s *BaseRW3CListener) EnterType_arg(ctx *Type_argContext) {}
+// EnterTypeArg is called when production typeArg is entered.
+func (s *BaseRW3CListener) EnterTypeArg(ctx *TypeArgContext) {}
 
-// ExitType_arg is called when production type_arg is exited.
-func (s *BaseRW3CListener) ExitType_arg(ctx *Type_argContext) {}
+// ExitTypeArg is called when production typeArg is exited.
+func (s *BaseRW3CListener) ExitTypeArg(ctx *TypeArgContext) {}
 
-// EnterName_expr is called when production name_expr is entered.
-func (s *BaseRW3CListener) EnterName_expr(ctx *Name_exprContext) {}
+// EnterNameExpr is called when production nameExpr is entered.
+func (s *BaseRW3CListener) EnterNameExpr(ctx *NameExprContext) {}
 
-// ExitName_expr is called when production name_expr is exited.
-func (s *BaseRW3CListener) ExitName_expr(ctx *Name_exprContext) {}
+// ExitNameExpr is called when production nameExpr is exited.
+func (s *BaseRW3CListener) ExitNameExpr(ctx *NameExprContext) {}
 
 // EnterArg is called when production arg is entered.
 func (s *BaseRW3CListener) EnterArg(ctx *ArgContext) {}
@@ -177,8 +189,8 @@ func (s *BaseRW3CListener) EnterArg(ctx *ArgContext) {}
 // ExitArg is called when production arg is exited.
 func (s *BaseRW3CListener) ExitArg(ctx *ArgContext) {}
 
-// EnterLit_expr is called when production lit_expr is entered.
-func (s *BaseRW3CListener) EnterLit_expr(ctx *Lit_exprContext) {}
+// EnterLitExpr is called when production litExpr is entered.
+func (s *BaseRW3CListener) EnterLitExpr(ctx *LitExprContext) {}
 
-// ExitLit_expr is called when production lit_expr is exited.
-func (s *BaseRW3CListener) ExitLit_expr(ctx *Lit_exprContext) {}
+// ExitLitExpr is called when production litExpr is exited.
+func (s *BaseRW3CListener) ExitLitExpr(ctx *LitExprContext) {}

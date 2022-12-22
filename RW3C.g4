@@ -1,9 +1,15 @@
 grammar RW3C;
 prog
-    :	expr_list += run* EOF 
+    :	exprList += run* EOF 
     ;
 run
-    :   (stmt | expr | 'break') ';'*
+    :   (stmt | expr) ';'*
+    ;
+whileRun
+    :   (run | 'break')*
+    ;
+whileExprBody
+    :   (expr | 'break')*
     ;
 expr
     :   '(' expr ')'
@@ -15,103 +21,105 @@ expr
     |   ('+'|'-') expr
     |   '!' expr
     |   expr ('++'|'--')
-    |   chain_expr   
+    |   chainExpr
+    |   atomicExpr
     ;
 
-chain_expr
-    :   atomic_expr (call_expr | access_prop_expr)*
-    ;
-
-atomic_expr
-    :   fn_expr 
-    |   lit_expr 
+atomicExpr
+    :   fnExpr 
+    |   litExpr 
     |   scope 
-    |   switch_expr
-    |   if_expr 
-    |   while_expr
+    |   switchExpr
+    |   ifExpr 
+    |   whileExpr
+    ;
+
+chainExpr
+    :   atomicExpr (callExpr | accessPropExpr)
+    ;
+callExpr
+    :   '(' (expr (',' expr)* ','?)? ')' 
+    ;
+accessPropExpr
+    :   '.' IDENTIF 
+    |   '[' expr ']' 
     ;
 
 stmt
     :   MULTI_COMMENT 
     |   SINGLE_COMMENT
-    |   assign_stmt
-    |   def_var_stmt
-    |   def_type_stmt
-    |   struct_stmt
-    |   ret_stmt
-    |   if_stmt
-    |   while_stmt
-    |   switch_stmt
+    |   assignStmt
+    |   defVarStmt
+    |   defTypeStmt
+    |   structStmt
+    |   retStmt
+    |   ifStmt
+    |   whileStmt
+    |   switchStmt
     ;
-if_stmt
-    :   'if ' expr run ('else ' if_stmt)* ('else ' run)?
+ifStmt
+    :   'if ' expr run ('else ' ifStmt)* ('else ' run)?
     ;
-if_expr
-    :   'if ' expr expr ('else ' if_expr)* ('else ' expr)?
+ifExpr
+    :   'if ' expr expr ('else ' ifExpr)* ('else ' expr)?
     ;
-switch_stmt
+switchStmt
     :   'switch ' expr '{' (('case ' expr ':' run) | ('default' ':' run))* '}'
     ;
-switch_expr
+switchExpr
     :   'switch ' expr '{' (('case ' expr ':' expr) | ('default' ':' expr))* '}'
     ;
-while_stmt
-    :   'while ' expr run
+whileStmt
+    :   'while ' expr whileRun
     ;
-while_expr
-    :   'while ' expr expr
+whileExpr
+    :   'while ' expr whileExprBody
     ;
-ret_stmt
+retStmt
     :   'ret' (' ' expr)?
     ;
-def_var_stmt
-    :   'let ' name_expr (':' '?'? type_expr) ('=' expr)?
-    |   'mut ' name_expr (':' '?'? type_expr) '=' expr
+defVarStmt
+    :   'let ' nameExpr (':' '?'? typeExpr) ('=' expr)?
+    |   'mut ' nameExpr (':' '?'? typeExpr) '=' expr
     ;
-def_type_stmt
-    :   'type ' IDENTIF ('=' type_expr)?
+defTypeStmt
+    :   'type ' IDENTIF ('=' typeExpr)?
     ;
-struct_stmt
-    :   'struct ' IDENTIF ('{' (IDENTIF ':' type_arg (',' IDENTIF ':' type_arg)* ','?)? '}')?
+structStmt
+    :   'struct ' IDENTIF ('{' (IDENTIF ':' typeArg (',' IDENTIF ':' typeArg)* ','?)? '}')?
     ;
-assign_stmt
+assignStmt
     :   expr '=' expr 
     ;
-call_expr
-    :   '(' (expr (',' expr)* ','?)? ')' 
-    ;
-access_prop_expr
-    :   '.' IDENTIF 
-    |   '[' expr ']' 
-    ;
-fn_expr
-    :   'fn ' IDENTIF? '(' (arg (',' arg)* ','?)? ')' (':' '?'? type_expr)? (run | scope)
+fnExpr
+    :   'fn ' IDENTIF? '(' (arg (',' arg)* ','?)? ')' (':' '?'? typeExpr)? (run | scope)
     ;
 scope
     :   '{' run* '}'
     ;
-access_prop_type_expr
+accessPropTypeExpr
     :   '.' IDENTIF
-    |   '[' type_expr ']'
+    |   '[' typeExpr ']'
     ;
-type_expr
-    :   (lit_expr | ('fn' '(' (type_arg (',' type_arg)* ','?)? ')' (':' '?'? type_expr)?)) access_prop_type_expr*
+typeExpr
+    :   (litExpr | ('fn' '(' (typeArg (',' typeArg)* ','?)? ')' (':' '?'? typeExpr)?)) accessPropTypeExpr*
     ;
-type_arg
-    :   type_expr '?'?
+typeArg
+    :   typeExpr '?'?
     ;
-name_expr
+nameExpr
     :   IDENTIF
     ;
 arg
-    : name_expr (':' '?'? type_arg)? ('=' expr)?
+    : nameExpr (':' '?'? typeArg)? ('=' expr)?
     ;
-lit_expr
+litExpr
     :   LONG 
     |   DOUBLE 
     |   STR 
     |   IDENTIF
     |   BOOL
+    |   NULL
     ;
 
 RESERVED
@@ -166,6 +174,9 @@ ESC
 BOOL
     :   'true'
     |   'false'
+    ;
+NULL
+    :   'null'
     ;
 MULTI_COMMENT 
     :   '/*' .*? '*/' -> channel(HIDDEN) 

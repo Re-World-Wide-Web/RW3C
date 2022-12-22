@@ -1,4 +1,4 @@
-module github.com/NekoMaru76/rw3
+module github.com/NekoMaru76/rw3c
 
 go 1.19
 
