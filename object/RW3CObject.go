@@ -1,6 +1,7 @@
 package object
 
 import (
+	"reflect"
 	"strconv"
 	"strings"
 
@@ -127,8 +128,48 @@ func (v BooleanObject) String() string {
 	return strconv.FormatBool(v.Value)
 }
 
+type NumberObject interface {
+	Type() ObjectType
+	String() string
+	IsFloating() bool
+	Bit() int32
+}
+
+func NewFloatObject(Value any) Object {
+	V, ok := Value.(float32)
+
+	if !ok {
+		V = 0
+	}
+
+	return FloatObject{
+		Value: V,
+	}
+}
+
+type FloatObject struct {
+	BaseObject
+	Value float32
+}
+
+func (v FloatObject) Type() ObjectType {
+	return FloatType{}
+}
+
+func (v FloatObject) String() string {
+	return strconv.FormatFloat(float64(v.Value), 8, 64, 64)
+}
+
+func (v FloatObject) IsFloating() bool {
+	return true
+}
+
+func (v FloatObject) Bit() int32 {
+	return 32
+}
+
 func NewIntegerObject(Value any) Object {
-	V, ok := Value.(int)
+	V, ok := Value.(int32)
 
 	if !ok {
 		V = 0
@@ -141,7 +182,7 @@ func NewIntegerObject(Value any) Object {
 
 type IntegerObject struct {
 	BaseObject
-	Value int
+	Value int32
 }
 
 func (v IntegerObject) Type() ObjectType {
@@ -149,7 +190,15 @@ func (v IntegerObject) Type() ObjectType {
 }
 
 func (v IntegerObject) String() string {
-	return strconv.FormatInt(int64(v.Value), 18)
+	return strconv.FormatInt(int64(v.Value), 10)
+}
+
+func (v IntegerObject) IsFloating() bool {
+	return false
+}
+
+func (v IntegerObject) Bit() int32 {
+	return 32
 }
 
 func NewLongObject(Value any) Object {
@@ -177,29 +226,12 @@ func (v LongObject) String() string {
 	return strconv.FormatInt(v.Value, 36)
 }
 
-func NewFloatObject(Value any) Object {
-	V, ok := Value.(float32)
-
-	if !ok {
-		V = 0
-	}
-
-	return FloatObject{
-		Value: V,
-	}
+func (v LongObject) IsFloating() bool {
+	return false
 }
 
-type FloatObject struct {
-	BaseObject
-	Value float32
-}
-
-func (v FloatObject) Type() ObjectType {
-	return FloatType{}
-}
-
-func (v FloatObject) String() string {
-	return strconv.FormatFloat(float64(v.Value), 4, 32, 32)
+func (v LongObject) Bit() int32 {
+	return 64
 }
 
 func NewDoubleObject(Value any) Object {
@@ -225,6 +257,14 @@ func (v DoubleObject) Type() ObjectType {
 
 func (v DoubleObject) String() string {
 	return strconv.FormatFloat(v.Value, 8, 64, 64)
+}
+
+func (v DoubleObject) IsFloating() bool {
+	return true
+}
+
+func (v DoubleObject) Bit() int32 {
+	return 64
 }
 
 type FunctionObject struct {
@@ -394,7 +434,7 @@ func (v StringType) String() string {
 
 type NumberType interface {
 	IsFloating() bool
-	Bit() int
+	Bit() int32
 }
 
 type IntegerType struct {
@@ -530,24 +570,24 @@ func (v StructType) String() string {
 
 type t2 = map[string]map[string]func(Object, Object) Object
 
-func newNum(isFloating bool, bit int) func(any) Object {
+func newNum(isFloating bool, bit int32, v any) Object {
 	switch bit {
 	case 32:
 		{
 			switch isFloating {
 			case true:
-				return NewFloatObject
+				return NewFloatObject(v)
 			case false:
-				return NewIntegerObject
+				return NewIntegerObject(v)
 			}
 		}
 	case 64:
 		{
 			switch isFloating {
 			case true:
-				return NewDoubleObject
+				return NewDoubleObject(v)
 			case false:
-				return NewLongObject
+				return NewLongObject(v)
 			}
 		}
 	}
@@ -562,66 +602,168 @@ func noOverload2Err(locs []serror.Location, a, b, op string) *serror.Error {
 	}
 }
 
-func TestSum(locs []serror.Location, a UnwrappedObject, b UnwrappedObject) *serror.Error {
-	switch a.Type().(type) {
-	case StringObject:
-		{
-			return nil
-		}
-	case FloatObject:
-	case IntegerObject:
-	case LongObject:
-	case DoubleObject:
-		{
-			switch b.Type().(type) {
-			case FloatObject:
-			case IntegerObject:
-			case LongObject:
-			case DoubleObject:
-				return nil
-			default:
-				return noOverload2Err(locs, a.Raw(), b.Raw(), "+")
-			}
+type BaseNumberObject struct {
+	NumberObject
+}
+
+var operatorTypes = map[string][][]reflect.Type{
+	"+": {
+		{reflect.TypeOf(StringObject{}), reflect.TypeOf(BaseObject{})},
+		{reflect.TypeOf(BaseNumberObject{}), reflect.TypeOf(BaseNumberObject{})},
+	},
+	"-": {
+		{reflect.TypeOf(BaseNumberObject{}), reflect.TypeOf(BaseNumberObject{})},
+	},
+	"*": {
+		{reflect.TypeOf(BaseNumberObject{}), reflect.TypeOf(BaseNumberObject{})},
+	},
+	"/": {
+		{reflect.TypeOf(BaseNumberObject{}), reflect.TypeOf(BaseNumberObject{})},
+	},
+}
+
+// checkTypes checks if the types of the operands are supported for the given operator.
+// If the types are not supported, it returns an error.
+func checkTypes(locs []serror.Location, a, b UnwrappedObject, op string) *serror.Error {
+	aType, bType := reflect.TypeOf(a.Type()), reflect.TypeOf(b.Type())
+	supportedTypesList, ok := operatorTypes[op]
+	if !ok {
+		return &serror.Error{
+			Location: locs,
+			Message:  serror.NO_OVERLOAD_2(a.Type().String(), b.Type().String(), op),
 		}
 	}
 
-	return noOverload2Err(locs, a.Raw(), b.Raw(), "+")
+	for _, supportedTypes := range supportedTypesList {
+		if containsType(supportedTypes, aType) && containsType(supportedTypes, bType) {
+			return nil
+		}
+	}
+
+	return noOverload2Err(locs, a.Raw(), b.Raw(), op)
+}
+
+// containsType checks if the given list of types contains the given type.
+func containsType(types []reflect.Type, t reflect.Type) bool {
+	for _, typ := range types {
+		if typ == t {
+			return true
+		}
+	}
+	return false
+}
+
+func TestSum(locs []serror.Location, a UnwrappedObject, b UnwrappedObject) *serror.Error {
+	return checkTypes(locs, a, b, "+")
+}
+
+func TestSub(locs []serror.Location, a UnwrappedObject, b UnwrappedObject) *serror.Error {
+	return checkTypes(locs, a, b, "-")
+}
+
+func TestMul(locs []serror.Location, a UnwrappedObject, b UnwrappedObject) *serror.Error {
+	return checkTypes(locs, a, b, "*")
+}
+
+func TestDiv(locs []serror.Location, a UnwrappedObject, b UnwrappedObject) *serror.Error {
+	return checkTypes(locs, a, b, "/")
+}
+
+func TestMod(locs []serror.Location, a UnwrappedObject, b UnwrappedObject) *serror.Error {
+	return checkTypes(locs, a, b, "%")
 }
 
 func Sum(locs []serror.Location, a Object, b Object) (*Object, *serror.Error) {
+	return performArithmeticOperation(locs, a, b, "+")
+}
+
+func Sub(locs []serror.Location, a Object, b Object) (*Object, *serror.Error) {
+	return performArithmeticOperation(locs, a, b, "-")
+}
+
+func Mul(locs []serror.Location, a Object, b Object) (*Object, *serror.Error) {
+	return performArithmeticOperation(locs, a, b, "*")
+}
+
+func Div(locs []serror.Location, a Object, b Object) (*Object, *serror.Error) {
+	return performArithmeticOperation(locs, a, b, "/")
+}
+
+func Mod(locs []serror.Location, a Object, b Object) (*Object, *serror.Error) {
+	return performArithmeticOperation(locs, a, b, "%")
+}
+
+func performArithmeticOperation(locs []serror.Location, a Object, b Object, op string) (*Object, *serror.Error) {
 	switch o1 := a.(type) {
 	case StringObject:
-		{
-			str := NewStringObject(o1.Value + b.String())
-			return &str, nil
-		}
-	case FloatObject:
-	case IntegerObject:
-	case LongObject:
-	case DoubleObject:
-		{
-			switch o2 := b.(type) {
-			case FloatObject:
-			case IntegerObject:
-			case LongObject:
-			case DoubleObject:
-				{
-					o1t := o1.Type().(NumberType)
-					o2t := o2.Type().(NumberType)
-					isFloating := o1t.IsFloating() || o2t.IsFloating()
-					bit := max(o1t.Bit(), o2t.Bit())
-					val := newNum(isFloating, bit)(o1.Value + o2.Value)
+		switch o2 := b.(type) {
+		case StringObject:
+			{
+				obj := NewStringObject(o1.Value + o2.Value)
 
-					return &val, nil
+				return &obj, nil
+			}
+		default:
+			{
+				obj := NewStringObject(o1.Value + o2.String())
+
+				return &obj, nil
+			}
+		}
+	case NumberObject:
+		switch o2 := b.(type) {
+		case NumberObject:
+			{
+				isFloating := o1.IsFloating() || o2.IsFloating()
+				bit := max(o1.Bit(), o2.Bit())
+
+				var value1 float64
+				switch v1 := o1.(type) {
+				case FloatObject:
+					value1 = float64(v1.Value)
+				case IntegerObject:
+					value1 = float64(v1.Value)
+				case LongObject:
+					value1 = float64(v1.Value)
+				case DoubleObject:
+					value1 = v1.Value
 				}
+				var value2 float64
+				switch v2 := o2.(type) {
+				case FloatObject:
+					value2 = float64(v2.Value)
+				case IntegerObject:
+					value2 = float64(v2.Value)
+				case LongObject:
+					value2 = float64(v2.Value)
+				case DoubleObject:
+					value2 = v2.Value
+				}
+
+				var value float64
+
+				switch op {
+				case "+":
+					value = value1 + value2
+				case "-":
+					value = value1 - value2
+				case "*":
+					value = value1 * value2
+				case "/":
+					value = value1 / value2
+				}
+
+				var obj = newNum(isFloating, bit, value)
+
+				return &obj, nil
 			}
 		}
 	}
 
-	return nil, noOverload2Err(locs, a.Raw(), b.Raw(), "+")
+	return nil, noOverload2Err(locs, a.Raw(), b.Raw(), op)
 }
 
-func max(a, b int) int {
+func max(a, b int32) int32 {
 	if a > b {
 		return a
 	}

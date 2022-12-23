@@ -54,16 +54,16 @@ func main() {
 	unwrapped := wrapped([]serror.Location{}, object.NewMainScope(object.RootVars{
 		Log: Log,
 	}))
-	e := unwrapped.Test()
+	/*e := unwrapped.Test()
 
 	if e != nil {
 		panic(e.String())
-	}
+	}*/
 
 	v, er := unwrapped.Value()
 
 	if er != nil {
-		panic(e.String())
+		panic(er.String())
 	}
 
 	fmt.Println((*v).String())

@@ -18,7 +18,7 @@ func NO_CALL_FN_ARG_DIFF(a string, a_name string, a_i int, b string) string {
 
 type Error struct {
 	Location []Location
-	Name     string `default:"Not Found"`
+	Name     string `default:"System Error"`
 	Message  string
 }
 
